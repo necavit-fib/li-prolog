@@ -19,8 +19,6 @@ dot([Head1|Tail1], [Head2|Tail2], Dot):-
   dot(Tail1, Tail2, InnerDot),
   Dot is Head1 * Head2 + InnerDot.
 
-
-
 %union(S1,S2,U).
 % Given two sets as lists without repeated elements
 % S1 and S2, U is the union of the sets
@@ -41,9 +39,13 @@ intersection([_|Set1], Set2, Intersection):-
 
 %lastElem(L,X).
 % Given a list L, X is its last element
-lastElement([Last], Last).
-lastElement([_|Tail], Last):-
-  lastElement(Tail, Last).
+lastElement(L,X):-
+  concat(_,[X],L).
+
+% another implementation:
+lastElement2([Last], Last).
+lastElement2([_|Tail], Last):-
+  lastElement2(Tail, Last).
 
 %inverse(L,I).
 % Given a list L, I is the inverted list
