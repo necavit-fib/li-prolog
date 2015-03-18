@@ -51,5 +51,20 @@ lastElement([_|Tail], Last):-
 inverse([], []).
 inverse([Head|Tail], I):-
   inverse(Tail, ),
-  I = 
+  I =
 */
+
+%dados(P,N,L).
+% Given P points & N rolls of a single die, give all the possible combinations
+% of rolls that would sum P points in the list L
+dice(0,0,[]).
+dice(Points,Nrolls,List):-
+	Nrolls > 0,
+	Points >= Nrolls,
+	Max is 6*Nrolls,
+	Points =< Max,
+	member(X,[1,2,3,4,5,6]),
+	N1rolls is Nrolls - 1,
+	RemainingPoints is Points - X,
+	dice(RemainingPoints,N1rolls,Auxlist),
+	List = [X|Auxlist].
