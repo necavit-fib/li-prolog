@@ -39,8 +39,8 @@ intersection([_|Set1], Set2, Intersection):-
 
 %lastElem(L,X).
 % Given a list L, X is its last element
-lastElement(L,X):-
-  concat(_,[X],L).
+lastElement(List, X):-
+  concat(_,[X], List).
 
 % another implementation:
 lastElement2([Last], Last).
@@ -49,18 +49,16 @@ lastElement2([_|Tail], Last):-
 
 %inverse(L,I).
 % Given a list L, I is the inverted list
-/*
 inverse([], []).
 inverse([Head|Tail], I):-
-  inverse(Tail, ),
-  I =
-*/
+  inverse(Tail, Aux),
+  concat(Aux, [Head], I).
 
 %dados(P,N,L).
 % Given P points & N rolls of a single die, give all the possible combinations
 % of rolls that would sum P points in the list L
-dice(0,0,[]).
-dice(Points,Nrolls,List):-
+dice(0, 0, []).
+dice(Points, Nrolls, List):-
 	Nrolls > 0,
 	Points >= Nrolls,
 	Max is 6*Nrolls,
@@ -68,5 +66,5 @@ dice(Points,Nrolls,List):-
 	member(X,[1,2,3,4,5,6]),
 	N1rolls is Nrolls - 1,
 	RemainingPoints is Points - X,
-	dice(RemainingPoints,N1rolls,Auxlist),
+	dice(RemainingPoints, N1rolls, Auxlist),
 	List = [X|Auxlist].
