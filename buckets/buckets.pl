@@ -1,6 +1,12 @@
-/*
- * 
- */
+/* **** **** **** **** **** */
+/* David Martínez Rodríguez */
+/* LI - May, 2015           */
+/* MIT License              */
+/* **** **** **** **** **** */
+
+/* *************************************************************** */
+/*                     BUCKETS PROBLEM SOLVER                      */
+/* *************************************************************** */
 
 /* PARAMETERS */
 smallBucket(5). %capacity of the small bucket
@@ -8,32 +14,45 @@ bigBucket(8).   %capacity of the big bucket
 goalVolume(4).  %final volume within the big bucket
 
 /* SOLVER */
+solve:-
+  goalVolume(Goal),
+  optimalSolution([0,0],[0,Goal]).
 
-step([_,_], [_,0]). %empty big
-step([_,_], [0,_]). %empty small
-step([_,B], [_,NB]):- %fill big
-  bigBucket(NB),
-  B < NB.
-step([S,_], [NS,_]):- %fill small
-  smallBucket(NS),
-  S < NS.
-step([S,B],[NS,NB]):- %small -> big
-  %TODO
+cost(Path,N):-
+  length(Path,N).
 
-path(State,State, Path,Path).
-path(CurrentState, GoalState, CurrentPath, TotalPath):-
-  step(CurrentState, NextState),
-  \+member(NextState, CurrentPath),
-  path(NextState, GoalState, [NextState|CurrentPath], TotalPath).
 
-optimalSolution:-
- %parameters
-  smallBucket(S),
-  bigBucket(B),
-  goalVolume(G),
-  
- %solver
-  nat(N),
-  path([0,0],[0,G],[[0,0]],P), %TODO fill the initial and goal states and the initial path
-  length(P,N),
-  write(P).
+min(X,Y,X):- X =< Y.
+min(X,Y,Y):- Y =< X.
+
+/* STEPS */
+
+%empty big
+step([S,_],[S,0]).
+
+%empty small
+step([_,B],[0,B]).
+
+%fill big
+step([S,_],[S,NB]):- bigBucket(NB).
+
+%fill small
+step([_,B],[NS,B]):- smallBucket(NS).
+
+%small -> big
+step([S,B],[NS,NB]):-
+  bigBucket(Maxcapacity),
+  Diff is Maxcapacity - B,
+  min(S,Diff,Delta),
+  NB is B + Delta,
+  NS is S - Delta.
+
+%big -> small
+step([S,B],[NS,NB]):-
+  smallBucket(Maxcapacity),
+  Diff is Maxcapacity - S,
+  min(B,Diff,Delta),
+  NB is B - Delta,
+  NS is S + Delta.
+
+/* *************************************************************** */
