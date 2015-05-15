@@ -8,6 +8,11 @@
 /*                     BUCKETS PROBLEM SOLVER                      */
 /* *************************************************************** */
 
+/*
+ * The state is modeled as follows:
+ *   State = [#L of small bucket, #L of big bucker]
+ */
+
 /* PARAMETERS */
 smallBucket(5). %capacity of the small bucket
 bigBucket(8).   %capacity of the big bucket
@@ -18,7 +23,7 @@ solve:-
   goalVolume(Goal),
   optimalSolution([0,0],[0,Goal]).
 
-cost(Path,N):-
+cost(Path,N):- %the cost is the amount of necessary steps
   length(Path,N).
 
 min(X,Y,X):- X =< Y.
