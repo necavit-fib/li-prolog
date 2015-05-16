@@ -31,4 +31,4 @@ swipl -O -g main --stand_alone=true -o $exec_file -c $solver_file
 echo ""
 echo "Executing solver..."
 echo "./$exec_file"
-./$exec_file 2> /dev/null
+./$exec_file #2> /dev/null
