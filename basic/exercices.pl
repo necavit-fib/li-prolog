@@ -54,7 +54,19 @@ inverse([Head|Tail], I):-
   inverse(Tail, Aux),
   concat(Aux, [Head], I).
 
-%dados(P,N,L).
+%fib(N,F).
+% Given an integer N, F is the N-th Fibonacci number
+fib(1,1).
+fib(2,1).
+fib(N,F):-
+  N > 2,
+  N1 is N - 1,
+  N2 is N - 2,
+  fib(N1,F1),
+  fib(N2,F2),!,
+  F is F1 + F2.
+
+%dice(P,N,L).
 % Given P points & N rolls of a single die, give all the possible combinations
 % of rolls that would sum P points in the list L
 dice(0, 0, []).
@@ -68,3 +80,9 @@ dice(Points, Nrolls, List):-
 	RemainingPoints is Points - X,
 	dice(RemainingPoints, N1rolls, Auxlist),
 	List = [X|Auxlist].
+
+/*
+sumOfOthers([]) :- fail.
+sumOfOthers(L):-
+  member(X,L),
+*/
