@@ -19,13 +19,14 @@ people([1,2,5,8]).  %list of people and their crossing times
 bridgeCapacity(2).  %capacity of the bridge
 
 /* SOLVER */
+boundedCost(1).
+
 solve:-
   people(P),
-  optimalSolution([left,P,[],0],[right,[],P,_]).
+  optimalSolution([left,P,[],0],[right,[],_,_]).
 
-%FIXME
-cost([[right,_,_,C]|_],C). %the cost has been accumulated during the path construction
-cost(_,_).
+cost([],0). %no steps => cost = 0
+cost([[_,_,_,Cost]|_],Cost). %the cost has been accumulated during the path construction
 
 msubset([], []).
 msubset([E|Tail], [E|NTail]):-

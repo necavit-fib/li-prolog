@@ -19,6 +19,8 @@ bigBucket(8).   %capacity of the big bucket
 goalVolume(4).  %final volume within the big bucket
 
 /* SOLVER */
+boundedCost(0).
+
 solve:-
   goalVolume(Goal),
   optimalSolution([0,0],[0,Goal]).

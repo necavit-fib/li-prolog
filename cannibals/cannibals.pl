@@ -22,6 +22,8 @@ cannibals(3).     %number of cannibals to cross the river
 canoeCapacity(2). %capacity of the boat
 
 /* SOLVER */
+boundedCost(0).
+
 solve:-
   missionaries(M),
   cannibals(C),
