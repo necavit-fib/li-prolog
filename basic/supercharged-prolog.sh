@@ -1,32 +1,29 @@
 #!/bin/bash
 
+bold=`tput bold`
+normal=`tput sgr0`
+
 function usage {
 	echo ""
-	echo "ERROR"
-	echo "Usage: $0 [-f LIB_FILE | --lib-file LIB_FILE]"
-	echo "    Loads the specified file into a SWIProlog engine."
-	echo "    If no file is specified, it defaults to 'exercices.pl'"
+	echo "usage: `basename $0` [-f LIB_FILE | --lib-file LIB_FILE]"
 	echo ""
+	echo "    ${bold}-f, --lib-file LIB_FILE${normal}"
+	echo "        Loads the specified file into a SWI-Prolog engine."
+	echo "        If no file is specified, it defaults to 'exercices.pl'"
+	echo ""
+	exit
 }
 
-LIB_FILE=exercices.pl
+if [ -n "$1" ] && [ "$1" = "-h" -o "$1" = "--help" ]; then
+	usage
+fi
 
-while [[ $# > 1 ]]; do
-	key="$1"
-	case $key in
-	  -f|--lib-file)
-	  $LIB_FILE="$2"
-	  shift
-	  ;;
-	  *)
-			# unknown option
-	  ;;
-	esac
-	shift
-done
+lib_file=exercices.pl
+if [ -n "$1" ] && [ "$1" = "-f" -o "$1" = "--lib-file" ]; then
+	lib_file="$2"
+fi
 
 echo ""
-echo "Running: swipl -l $LIB_FILE ..."
+echo "Running: swipl -l $lib_file ..."
 echo ""
-echo ""
-swipl -l $LIB_FILE
+swipl -l $lib_file
