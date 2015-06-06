@@ -53,10 +53,7 @@ function clean_solver {
 	rm -f $exec_file
 }
 
-function execute_generic_solver {
-	echor "appending generic solver to $solver_file..."
-	cat generic-solver.pl >> $solver_file
-
+function compile_execute {
 	echor "appending problem solver $solver_logic to $solver_file..."
 	cat $solver_logic >> $solver_file
 
@@ -72,6 +69,12 @@ function execute_generic_solver {
 	cat $solution_tmp
 	echo ""
 	rm -f $solution_tmp
+}
+
+function execute_generic_solver {
+	echor "appending generic solver to $solver_file..."
+	cat generic-solver.pl >> $solver_file
+	compile_execute
 }
 
 function bridge {
@@ -89,18 +92,13 @@ function buckets {
 function cachan {
 	clean_solver
 	solver_logic=cachan/cachan.pl
-	echor "appending problem solver $solver_logic to $solver_file..."
-	cat $solver_logic >> $solver_file
-	echor "compiling solver to executable file: $exec_file..."
-	swipl -O -g main --stand_alone=true -o $exec_file -c $solver_file
-	echor "executing solver..."
-	$exec_file > $solution_tmp
-	echor "DONE executing solver!"
-	echor "solution found by the solver:"
-	echo ""
-	cat $solution_tmp
-	echo ""
-	rm -f $solution_tmp
+	if [ -n "$2" ] && [ "$2" = "--check" ]; then
+		echor "enabling solution checking..."
+		echo "checkSolution(1)." >> $solver_file
+	else
+		echo "checkSolution(0)." >> $solver_file
+	fi
+	compile_execute
 }
 
 function cannibals {
@@ -121,7 +119,7 @@ case "$problem" in
 	"-h"|"--help") usage ;;
 	"bridge") bridge ;;
 	"buckets") buckets ;;
-	"cachan") cachan ;;
+	"cachan") cachan "$@" ;;
 	"cannibals") cannibals ;;
 	*)
 		echor "error: problem not recognised"
