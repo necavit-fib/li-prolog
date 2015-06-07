@@ -196,3 +196,70 @@ merge([L|LL], [R|RL], [L|Merged]):-
   merge(LL,[R|RL],Merged).
 merge([L|LL], [R|RL], [R|Merged]):-
   merge([L|LL],RL,Merged).
+
+%17.
+%dictionary(A,N).
+% Given an alphabet of symbols A and a natural N, write all
+% the possible words that can be formed using symbols of A,
+% in increasing alphabetical order (the order being that of the
+% symbols in A!!).
+dictionary(Alphabet,N):-
+  nmember(Alphabet,N,Members),
+  writeMembers(Members), write(' '),
+  fail.
+dictionary(_,_).
+
+nmember(_,0,[]):- !.
+nmember(Alphabet,N,Members):-
+  member(X,Alphabet),
+  N1 is N - 1,
+  nmember(Alphabet,N1,Partial),
+  append([X],Partial,Members).
+
+writeMembers([]).
+writeMembers([Member|Tail]):-
+  write(Member),
+  writeMembers(Tail).
+
+%18.
+%palindromes(L).
+% Given a list of letters L, write all the permutations of
+% its elements such that their are palindromes.
+palindromes(L):-
+  uniquePermutations(L,[],UniquePermutations),!,
+  member(Permutation,UniquePermutations),
+  palindrome(Permutation),
+  write(Permutation),nl,
+  fail.
+palindromes(_).
+
+uniquePermutations(List, Accum, [Perm|Unique]) :-
+	permutation(List, Perm),
+	\+member(Perm, Accum),
+	uniquePermutations(List, [Perm|Accum], Unique).
+uniquePermutations(_, _, []).
+
+palindrome(Word):-
+  inverse(Word,Word).
+
+%19.
+% SEND + MORE = MONEY problem
+% It has been solved using the Constraint Logic Programming module.
+?- use_module(library(clpfd)).
+send_more_money :-
+	L = [S,E,N,D,M,O,R,Y], %variables
+	L ins 0..9, %range of variables
+	all_different(L),
+	               1000 * S + 100 * E + 10 * N + 1 * D
+	+              1000 * M + 100 * O + 10 * R + 1 * E
+	#= 10000 * M + 1000 * O + 100 * N + 10 * E + 1 * Y,
+	label(L),!, write([s,e,n,d,m,o,r,y]), nl, write(L).
+
+%20.
+% I have not understood the scope of this problem. The solution
+% is available, but I could not grasp how exactly was it working
+% nor its usage.
+
+%21.
+% The cannibals problem is already solved in another assignment.
+% Please refer to that implementation.
